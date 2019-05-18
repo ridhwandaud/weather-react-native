@@ -10,6 +10,10 @@ import moment from 'moment';
 import ListItem from '../Components/ListItem';
 import Server from '../Helpers/Server';
 
+import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
+import WeatherActions from '../_Actions/WeatherActions';
+
 class Weather extends Component {
   
   constructor(props) {
@@ -17,46 +21,40 @@ class Weather extends Component {
   
     this.state = { 
     	date: moment().format('ddd, DD MMMM YYYY HH:mm A'),
-    	list: null,
     };
   }
 
   componentDidMount() {
 
-  	// change to redux
-    Server.get('forecast?lat=3.17&lon=101.5&appid=eb8a362432da223838169af4b1ce7649&units=imperial').then(({ data })=>{
-    	console.log('data', data)
-    	this.setState({ list: data.list })
-    },
-    (error)=>{
-    	this.setState({ error: 'Failed to connect to server' })
-    	console.log('error', error);
-    })
+  	const { WeatherActions } = this.props;
+
+  	WeatherActions.fetchWeather();
+
   }
 
   render() {
+  	const { isLoading, list, error } = this.props;
+
     return (
       <SafeAreaView>
-      	{
-      		<View style={styles.errorContainer}>
-      			<Text style={styles.errorText}>
-	      			{this.state.error}
-	      		</Text>
-      		</View>
-      	}
+      	<View style={styles.errorContainer}>
+  			<Text style={styles.errorText}>
+      			{error}
+      		</Text>
+  		</View>
       	<View style={styles.header}>
 	      	<Text style={styles.date}>
 	      		{this.state.date}
 	      	</Text>
 	      	<Text style={styles.temp}>
-	      		{ this.state.list && this.state.list[0].main.temp.toFixed(0)}
+	      		{ list && list[0].main.temp.toFixed(0)}
 	      	</Text>
 	      	<Text style={styles.weather}>
-	      		{ this.state.list && this.state.list[0].weather[0].main}
+	      		{ list && list[0].weather[0].main}
 	      	</Text>
       	</View>
       	<ListItem 
-      		list={this.state.list} 
+      		list={list} 
       		style={styles.list}
       	/>
       </SafeAreaView>
@@ -97,5 +95,18 @@ const styles = StyleSheet.create({
 	}
 });
 
+const mapStateToProps = ({ WeatherReducer }) => ({
+	isLoading: WeatherReducer.isLoading,
+	list: WeatherReducer.list,
+	error: WeatherReducer.error,
+});
 
-export default Weather;
+const mapDispatchToProps = (dispatch) => {
+	return {
+		WeatherActions: bindActionCreators(WeatherActions, dispatch)
+	};
+};
+
+export default connect(mapStateToProps,mapDispatchToProps)(Weather);
+
+
