@@ -21,6 +21,7 @@ class Weather extends Component {
   
     this.state = { 
     	date: moment().format('ddd, DD MMMM YYYY HH:mm A'),
+    	index: 0,
     };
   }
 
@@ -30,6 +31,10 @@ class Weather extends Component {
 
   	WeatherActions.fetchWeather();
 
+  }
+
+  onPress = (index) => {
+  	this.setState({ index });
   }
 
   render() {
@@ -47,15 +52,16 @@ class Weather extends Component {
 	      		{this.state.date}
 	      	</Text>
 	      	<Text style={styles.temp}>
-	      		{ list && list[0].main.temp.toFixed(0)}
+	      		{ list && list[this.state.index].main.temp.toFixed(0)}
 	      	</Text>
 	      	<Text style={styles.weather}>
-	      		{ list && list[0].weather[0].main}
+	      		{ list && list[this.state.index].weather[0].main}
 	      	</Text>
       	</View>
       	<ListItem 
       		list={list} 
       		style={styles.list}
+      		onPress={this.onPress}
       	/>
       </SafeAreaView>
     );

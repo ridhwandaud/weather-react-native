@@ -6,15 +6,18 @@ import {
   StyleSheet,
   View,
   Text,
-  FlatList
+  FlatList,
+  Alert,
+  TouchableOpacity
 } from 'react-native';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 class ListItem extends Component {
   
-  _renderItem = ({item}) => (
-    <View style={styles.card}>
+  _renderItem = ({item, index}) => (
+
+    <TouchableOpacity style={styles.card} onPress={() => this.props.onPress(index)}>
       <View>
           <Text style={styles.textBold}>
               {moment(item.dt_txt).format('DD MMMM YYYY, HH:mm A')}
@@ -33,7 +36,7 @@ class ListItem extends Component {
           color="#f44336" 
         />
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   render() {
