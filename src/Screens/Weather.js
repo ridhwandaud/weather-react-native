@@ -55,7 +55,6 @@ class Weather extends Component {
 
   //update permissions when app comes back from settings
   _handleAppStateChange = appState => {
-  	console.log('_handleAppStateChange');
     if (appState == 'active') {
       this._updatePermissions(this.state.types)
     }
@@ -84,7 +83,6 @@ class Weather extends Component {
 
   render() {
   	const { isLoading, list, city, error } = this.props;
-  	console.log('status', this.state.status)
     return (
       <View style={styles.container}>
       	<StatusBar backgroundColor={PRIMARY_COLOR} barStyle="light-content" />
