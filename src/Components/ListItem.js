@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { PRIMARY_COLOR, GREY_COLOR } from '../Helpers/Colors';
+import { DEFAULT_FONT_REGULAR, DEFAULT_FONT_BOLD, DEFAULT_FONT_LIGHT } from '../Helpers/Fonts';
 
 class ListItem extends Component {
   
@@ -33,7 +35,7 @@ class ListItem extends Component {
         <Icon 
           name="chevron-right" 
           size={20} 
-          color="#f44336" 
+          color={PRIMARY_COLOR} 
         />
       </View>
     </TouchableOpacity>
@@ -53,16 +55,20 @@ class ListItem extends Component {
 const styles = StyleSheet.create({
   card: {
     borderBottomWidth: 1, 
-    borderColor: '#d3d3d3', 
+    borderColor: GREY_COLOR, 
     padding: 20, 
     flexDirection: 'row', 
     justifyContent: 'space-between'
   },
   textBold: {
-    fontWeight: 'bold'
+    fontFamily: DEFAULT_FONT_BOLD,
+  },
+  text: {
+    fontFamily: DEFAULT_FONT_REGULAR,
   },
   textGrey: {
-    color: 'grey'
+    fontFamily: DEFAULT_FONT_LIGHT,
+    color: GREY_COLOR,
   },
   iconContainer: {
     justifyContent: 'center', 

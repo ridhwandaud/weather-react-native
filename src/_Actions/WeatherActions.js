@@ -39,7 +39,7 @@ const getCurrentLocation = () => {
 			},
 			//callback error
 			(error) => { console.log('error', error)},
-			{ enableHighAccuracy: false, timeout: 2000, maximumAge: 10000 },
+			{ enableHighAccuracy: true, timeout: 10000, maximumAge: 10000 },
 		);
 	};
 };

@@ -16,6 +16,9 @@ import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 import WeatherActions from '../_Actions/WeatherActions';
 
+import { PRIMARY_COLOR, GREY_COLOR } from '../Helpers/Colors';
+import { DEFAULT_FONT_REGULAR, DEFAULT_FONT_BOLD, DEFAULT_FONT_LIGHT } from '../Helpers/Fonts';
+
 class Weather extends Component {
   
   constructor(props) {
@@ -78,7 +81,7 @@ const styles = StyleSheet.create({
 	container: {
 	},
 	nav: {
-		backgroundColor: '#e53935',
+		backgroundColor: PRIMARY_COLOR,
 		justifyContent: 'center',
 		alignItems: 'center',
 		padding: 16,
@@ -86,13 +89,15 @@ const styles = StyleSheet.create({
 	},
 	navText: {
 		color: 'white',
+		fontFamily: DEFAULT_FONT_REGULAR,
+		fontSize: 16,
 	},
 	errorContainer: {
 		justifyContent: 'center', 
 		alignItems: 'center'
 	},
 	errorText: {
-		color: '#e53935',
+		color: PRIMARY_COLOR,
 		fontWeight: 'bold', 
 		fontSize: 25,
 	},
@@ -103,15 +108,16 @@ const styles = StyleSheet.create({
 		alignItems: 'center'
 	},
 	date: {
-		fontWeight: 'bold', 
-		fontSize: 20
+		fontSize: 20,
+		fontFamily: DEFAULT_FONT_BOLD
 	},
 	temp: {
-		fontWeight: 'bold', 
-		fontSize: 50
+		fontSize: 50,
+		fontFamily: DEFAULT_FONT_BOLD
 	},
 	weather: {
-		color: 'grey', 
+		fontFamily: DEFAULT_FONT_REGULAR,
+		color: GREY_COLOR, 
 		fontSize: 20
 	},
 	list: {
