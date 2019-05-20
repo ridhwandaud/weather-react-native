@@ -2,8 +2,9 @@ import types from '../_Actions/Types';
 
 const INITIAL_STATE = { 
 	isLoading: false,
-	list: [],
+	list: null,
 	error: null,
+	city: null,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -19,6 +20,7 @@ export default (state = INITIAL_STATE, action) => {
 			return {
 				...state,
 				list: payload.list,
+				city: payload.city
 			};
 		case types.FETCH_WEATHER_FAILED:
 			return {

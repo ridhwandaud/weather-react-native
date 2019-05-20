@@ -4,7 +4,9 @@ import {
   StyleSheet,
   View,
   Text,
-  SafeAreaView
+  SafeAreaView,
+  StatusBar,
+  Platform
 } from 'react-native';
 import moment from 'moment';
 import ListItem from '../Components/ListItem';
@@ -28,8 +30,7 @@ class Weather extends Component {
   componentDidMount() {
 
   	const { WeatherActions } = this.props;
-
-  	WeatherActions.fetchWeather();
+  	WeatherActions.getCurrentLocation();
 
   }
 
@@ -38,10 +39,15 @@ class Weather extends Component {
   }
 
   render() {
-  	const { isLoading, list, error } = this.props;
-
+  	const { isLoading, list, city, error } = this.props;
     return (
-      <SafeAreaView>
+      <View style={styles.container}>
+      	<StatusBar backgroundColor="#e53935" barStyle="light-content" />
+      	<View style={styles.nav}>
+  			<Text style={styles.navText}>
+      			{ city && `${city.name}, ${city.country}`}
+      		</Text>
+  		</View>
       	<View style={styles.errorContainer}>
   			<Text style={styles.errorText}>
       			{error}
@@ -63,12 +69,24 @@ class Weather extends Component {
       		style={styles.list}
       		onPress={this.onPress}
       	/>
-      </SafeAreaView>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+	container: {
+	},
+	nav: {
+		backgroundColor: '#e53935',
+		justifyContent: 'center',
+		alignItems: 'center',
+		padding: 16,
+		paddingTop: Platform.OS === 'ios' ? 50 : 16,
+	},
+	navText: {
+		color: 'white',
+	},
 	errorContainer: {
 		justifyContent: 'center', 
 		alignItems: 'center'
@@ -104,6 +122,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({ WeatherReducer }) => ({
 	isLoading: WeatherReducer.isLoading,
 	list: WeatherReducer.list,
+	city: WeatherReducer.city,
 	error: WeatherReducer.error,
 });
 
