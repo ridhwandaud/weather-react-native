@@ -20,11 +20,13 @@ export default (state = INITIAL_STATE, action) => {
 			return {
 				...state,
 				list: payload.list,
-				city: payload.city
+				city: payload.city,
+				isLoading: false,
 			};
 		case types.FETCH_WEATHER_FAILED:
 			return {
 				...state,
+				isLoading: false,
 				error: payload.message,
 			};		
 		default:

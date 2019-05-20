@@ -8,7 +8,8 @@ import {
   StatusBar,
   Platform,
   Alert,
-  AppState
+  AppState,
+  ActivityIndicator
 } from 'react-native';
 import moment from 'moment';
 import Permissions from 'react-native-permissions'
@@ -87,31 +88,43 @@ class Weather extends Component {
       <View style={styles.container}>
       	<StatusBar backgroundColor={PRIMARY_COLOR} barStyle="light-content" />
       	<View style={styles.nav}>
-  			<Text style={styles.navText}>
-      			{ city && `${city.name}, ${city.country}`}
-      		</Text>
-  		</View>
+    			<Text style={styles.navText}>
+        			{ city && `${city.name}, ${city.country}`}
+        		</Text>
+    		</View>
       	<View style={styles.errorContainer}>
-  			<Text style={styles.errorText}>
-      			{error}
-      		</Text>
-  		</View>
-      	<View style={styles.header}>
-	      	<Text style={styles.date}>
-	      		{this.state.date}
-	      	</Text>
-	      	<Text style={styles.temp}>
-	      		{ list && list[this.state.index].main.temp.toFixed(0)}
-	      	</Text>
-	      	<Text style={styles.weather}>
-	      		{ list && list[this.state.index].weather[0].main}
-	      	</Text>
-      	</View>
-      	<ListItem 
-      		list={list} 
-      		style={styles.list}
-      		onPress={this.onPress}
-      	/>
+    			<Text style={styles.errorText}>
+        			{error}
+        		</Text>
+    		</View>
+        {
+          isLoading ? 
+
+          <View style={styles.loading}>
+            <ActivityIndicator size="large" color={PRIMARY_COLOR}/>
+          </View>
+          :
+
+          <View style={styles.container}>
+            <View style={styles.header}>
+              <Text style={styles.date}>
+                {this.state.date}
+              </Text>
+              <Text style={styles.temp}>
+                { list && list[this.state.index].main.temp.toFixed(0)}
+              </Text>
+              <Text style={styles.weather}>
+                { list && list[this.state.index].weather[0].main}
+              </Text>
+            </View>
+            <ListItem 
+              list={list} 
+              style={styles.list}
+              onPress={this.onPress}
+            />
+          </View>
+        }
+      	
       </View>
     );
   }
@@ -119,6 +132,7 @@ class Weather extends Component {
 
 const styles = StyleSheet.create({
 	container: {
+    flex: 1,
 	},
 	nav: {
 		backgroundColor: PRIMARY_COLOR,
@@ -162,7 +176,13 @@ const styles = StyleSheet.create({
 	},
 	list: {
 		flex: 1,
-	}
+	},
+  loading: {
+    padding: 20,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });
 
 const mapStateToProps = ({ WeatherReducer }) => ({
