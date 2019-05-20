@@ -6,9 +6,13 @@ import {
   Text,
   SafeAreaView,
   StatusBar,
-  Platform
+  Platform,
+  Alert,
+  AppState
 } from 'react-native';
 import moment from 'moment';
+import Permissions from 'react-native-permissions'
+
 import ListItem from '../Components/ListItem';
 import Server from '../Helpers/Server';
 
@@ -27,14 +31,51 @@ class Weather extends Component {
     this.state = { 
     	date: moment().format('ddd, DD MMMM YYYY HH:mm A'),
     	index: 0,
+    	status: {},
+    	types: [],
     };
   }
 
   componentDidMount() {
 
   	const { WeatherActions } = this.props;
-  	WeatherActions.getCurrentLocation();
 
+  	// handle location permission
+  	let types = Permissions.getTypes();
+
+  	this._updatePermissions(types);
+
+  	AppState.addEventListener('change', this._handleAppStateChange)
+
+  	WeatherActions.getCurrentLocation((error) => {
+  		Alert.alert(error);
+  	});
+
+  }
+
+  //update permissions when app comes back from settings
+  _handleAppStateChange = appState => {
+  	console.log('_handleAppStateChange');
+    if (appState == 'active') {
+      this._updatePermissions(this.state.types)
+    }
+    WeatherActions.getCurrentLocation((error) => {
+  		Alert.alert(error);
+  	});
+  }
+
+  _updatePermissions = types => {
+    Permissions.checkMultiple(types)
+      .then(status => {
+        if (this.state.isAlways) {
+          return Permissions.check('location', 'always').then(location => ({
+            ...status,
+            location,
+          }))
+        }
+        return status
+      })
+      .then(status => this.setState({ status }))
   }
 
   onPress = (index) => {
@@ -43,9 +84,10 @@ class Weather extends Component {
 
   render() {
   	const { isLoading, list, city, error } = this.props;
+  	console.log('status', this.state.status)
     return (
       <View style={styles.container}>
-      	<StatusBar backgroundColor="#e53935" barStyle="light-content" />
+      	<StatusBar backgroundColor={PRIMARY_COLOR} barStyle="light-content" />
       	<View style={styles.nav}>
   			<Text style={styles.navText}>
       			{ city && `${city.name}, ${city.country}`}

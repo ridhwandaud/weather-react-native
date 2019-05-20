@@ -27,7 +27,9 @@ const fetchWeather = (params) => {
 	};
 };
 
-const getCurrentLocation = () => {
+const NO_LOCATION_PROVIDER_AVAILABLE = 2;
+
+const getCurrentLocation = (callBackError) => {
 	return (dispatch, getState) => {
 		navigator.geolocation.getCurrentPosition((position) => {
 
@@ -38,7 +40,14 @@ const getCurrentLocation = () => {
 				dispatch(fetchWeather(params));
 			},
 			//callback error
-			(error) => { console.log('error', error)},
+			(error) => {
+				console.log('error', error)
+				if (error.code === NO_LOCATION_PROVIDER_AVAILABLE) {
+		         	//Show alert or something here that GPS need to turned on.
+		         	callBackError && callBackError('GPS must turn on');
+		      	}
+				
+			},
 			{ enableHighAccuracy: true, timeout: 10000, maximumAge: 10000 },
 		);
 	};
